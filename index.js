@@ -1,6 +1,8 @@
 const path = require('path')
 const express = require('express')
 const app = express()
+const { v4: uuid } = require('uuid')
+uuid()
 
 //To parse form data in POST request body:
 app.use(express.urlencoded({ extended: true }))
@@ -12,10 +14,10 @@ app.set('view engine', 'ejs')
 
 // Our fake database:
 let comments = [
-  { id: 1, username: 'Todd', comment: 'lol that is so funny!' },
-  { id: 2, username: 'Skyler', comment: 'I like to go birdwatching with my dog' },
-  { id: 3, username: 'Sk8erBoi', comment: 'Plz delete your account, Todd' },
-  { id: 4, username: 'onlysayswoof', comment: 'woof woof woof' },
+  { id: uuid(), username: 'Todd', comment: 'lol that is so funny!' },
+  { id: uuid(), username: 'Skyler', comment: 'I like to go birdwatching with my dog' },
+  { id: uuid(), username: 'Sk8erBoi', comment: 'Plz delete your account, Todd' },
+  { id: uuid(), username: 'onlysayswoof', comment: 'woof woof woof' },
 ]
 
 app.get('/comments', (req, res) => {
@@ -32,6 +34,7 @@ app.post('/comments', (req, res) => {
   comments.push({
     username,
     comment,
+    id: uuid(),
   })
   res.redirect('/comments')
 })
@@ -39,7 +42,7 @@ app.post('/comments', (req, res) => {
 app.get('/comments/:id', (req, res) => {
   const { id } = req.params
 
-  const comment = comments.find((c) => c.id === parseInt(id))
+  const comment = comments.find((c) => c.id === id)
 
   res.render('comments/show', { comment })
 })
